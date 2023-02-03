@@ -5,6 +5,7 @@ const app = express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const User = require('./models/User');
+const cookieParser = require('cookie-parser');
 
 
 const salt = bcrypt.genSaltSync(10);
@@ -12,6 +13,7 @@ const secret = 'sdhx67agyhs'
 
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(express.json());
+app.use(cookieParser())
 
 mongoose.connect('mongodb+srv://BLOGGO123:wD0JgC0h7cw5obuL@bloggo-cluster.dr2synp.mongodb.net/?retryWrites=true&w=majority')
 .then(() => console.log('connected'))
@@ -47,6 +49,16 @@ app.post('/login', async (req,res) => {
         res.status(400).json("wrong credentials")
     }
 })
+
+
+app.get('/profile', (req,res) => {
+    const {token} = req.cookies;
+    jwt.verify(token, secret, {}, (err,info) => {
+        if(err) throw err;
+        res.json(info)
+    })
+})
+
 
 app.listen(4000,() => {
     console.log("listening at PORT",4000)
