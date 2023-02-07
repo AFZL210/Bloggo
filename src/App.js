@@ -4,9 +4,11 @@ import Layout from './Layout';
 import Index from './pages/Index';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import { UserContextProvider } from './UserContext';
 
 function App() {
   return (
+    <UserContextProvider>
     <Routes>
       <Route path='/' element={<Layout />} >
 
@@ -18,6 +20,7 @@ function App() {
 
       </Route>
     </Routes>
+    </UserContextProvider>
   );
 }
 
