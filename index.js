@@ -43,7 +43,10 @@ app.post('/login', async (req,res) => {
     if(passFlag) {
         jwt.sign({username,id:UserDoc._id}, secret, {}, (err,token) => {
             if(err) throw err;
-            res.cookie('token',token).json('ok')
+            res.cookie('token',token).json({
+                id:UserDoc._id,
+                username:UserDoc.username
+            })
         })
     }else{
         res.status(400).json("wrong credentials")
@@ -52,11 +55,16 @@ app.post('/login', async (req,res) => {
 
 
 app.get('/profile', (req,res) => {
-    const {token} = req.cookies;
-    jwt.verify(token, secret, {}, (err,info) => {
-        if(err) throw err;
+    const { token } = req.cookies;
+    jwt.verify(token,secret,{},(err,info) => {
+        if(err) throw err
         res.json(info)
     })
+})
+
+
+app.post('/logout',(req,res) => {
+    res.cookie('token','').json('ok')
 })
 
 
@@ -64,4 +72,4 @@ app.listen(4000,() => {
     console.log("listening at PORT",4000)
 })
 
-// mongodb+srv://BLOGGO123:wD0JgC0h7cw5obuL@bloggo-cluster.dr2synp.mongodb.net/?retryWrites=true&w=majority
+// mongodb+srv://BLOGGO123:wD0JgC0h7cw5obuL@bloggo-cluster.dr2synp.mongodb.net/?retryWrites=true&w=majority 
