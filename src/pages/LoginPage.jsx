@@ -23,7 +23,10 @@ const LoginPage = () => {
 
     if(newLogin.status !== 200) alert('login failed')
     else {
-      setRedirect(true)
+      newLogin.json().then(userInfo => {
+        setUserInfo(userInfo)
+        setRedirect(true)
+      })
     }
   }
 
