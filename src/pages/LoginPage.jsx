@@ -11,19 +11,33 @@ const LoginPage = () => {
   const {setUserInfo} = useContext(UserContext)
   const [redirect,setRedirect] = useState(false)
 
- 
+  const loginUser = async(e) => {
+    e.preventDefault();
 
+    const newLogin = await fetch('http://localhost:5000/user/login', {
+      method: 'POST',
+      body: JSON.stringify({username,password}),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
 
+    if(newLogin.status !== 200) alert('login failed')
+    else {
+      setRedirect(true)
+    }
+  }
+
+  
   if(redirect) {
     return <Navigate to='/' />
   }
 
   return (
-    <form className='login'>
+    <form className='login' onSubmit={loginUser}>
         <h1>Login</h1>
         <input type="text" placeholder='username' value={username} onChange={e => setUsername(e.target.value)}/>
         <input type="password" placeholder='password' value={password} onChange={e => setPassword(e.target.value)}/>
-        <button>Login</button>
+        <button type='submit'>Login</button>
         <h4>Don't have an account? <span><Link to='/register'>Create account</Link></span></h4>
     </form>
   )

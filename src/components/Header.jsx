@@ -1,4 +1,4 @@
-import React, {useEffect, useContext } from 'react'
+import React, {useEffect, useContext, useState } from 'react'
 import '../App.css'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../UserContext'
@@ -6,8 +6,11 @@ import { UserContext } from '../UserContext'
 const Header = () => {
 
   const {userInfo,setUserInfo} = useContext(UserContext)
-  const username = null
+  const [username, setUsername] = useState(null)
 
+  const logoutUser = () => {
+    
+  }
 
   return (
     <header>
@@ -17,7 +20,7 @@ const Header = () => {
         {username && (
           <>
             <Link to='/create'>Create new post</Link>
-            <Link>Logout</Link>
+            <Link onClick={logoutUser}>Logout</Link>
           </>
         )}
 
