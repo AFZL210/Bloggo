@@ -39,8 +39,14 @@ app.post('/user/login', async(req,res) => {
     
     if(passCheck) {
         jwt.sign({ username, id:loginUser._id }, secret, {}, (err,token) => {
-            if(err) throw err;
-            res.cookie('token',token).json('ok')
+            if(err) {
+                res.status(401).json('not authorized')
+                throw err
+            }
+            res.cookie('token',token).json({
+                id: loginUser._id,
+                username: username
+            })
         })
     } else {
         res.status(400).json('wrong credentials');
