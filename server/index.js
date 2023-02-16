@@ -4,10 +4,14 @@ const PORT = 5000 || process.env.PORT;
 const cors = require('cors');
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Post = require('./models/Post');
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const uploadMiddleware = multer({dest:'uploads/'});
+const fs = require('fs');
 
 app.use(cors({credentials:true, origin:'http://localhost:3000'}));
 app.use(express.json())
@@ -69,8 +73,30 @@ app.post('/user/logout', async(req,res) => {
 
 
 // handle new post
-app.post('/post/newpost', async(req,res) => {
+app.post('/post/newpost', uploadMiddleware.single('file'), async(req,res) => {
+    const { originalname, path } = req.file;
+    const parts = originalname.split('.')
+    const ext = parts[parts.length - 1].toLowerCase()
+    const newPath = path+'.'+ext;
+    fs.renameSync(path, path+'.'+ext)
+
+    const { title, summary, content } = req.body;
+
+    const newPostDoc = await Post.create({
+        title,
+        summary,
+        content,
+        cover: newPath,
+        
+    })
+
     res.json('ok')
+})
+
+
+app.get('/allposts', async(req,res) => {
+    const posts = await Post.find();
+    res.json(posts)
 })
 
 app.listen(PORT, () => {
