@@ -56,9 +56,9 @@ run the client app
 
 ## Tech Stack
 
-**Client:** React, ContextAPI, MaterialUI
+**Client:** React, ContextAPI, MaterialUI, react-quill
 
-**Server:** Node, Express
+**Server:** Node, Express, JWT
 
 **Database:** MongoDB Atlas
 
