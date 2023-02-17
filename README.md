@@ -66,7 +66,9 @@ run the client app
 
 
 ## Todo
-- [] fix auth
+- [X] fix auth
+- [X] add create post page
+- [X] add loader
 - [] add edit post page
 - [] add user profile
 - [] like post
