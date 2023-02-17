@@ -4,16 +4,21 @@ const PORT = 5000 || process.env.PORT;
 const cors = require('cors');
 const mongoose = require('mongoose');
 const User = require('./models/User');
+const Post = require('./models/Post');
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const uploadMiddleware = multer({dest:'uploads/'});
+const fs = require('fs');
 
 app.use(cors({credentials:true, origin:'http://localhost:3000'}));
 app.use(express.json())
 app.use(cookieParser())
 const salt = bcrypt.genSaltSync(10)
 const secret = 'abc123xyz'
+app.use('/uploads', express.static(__dirname + '/uploads'))
 
 mongoose.connect(`mongodb+srv://BLOGGO123:wD0JgC0h7cw5obuL@bloggo-cluster.dr2synp.mongodb.net/?retryWrites=true&w=majority`)
 .then(() => console.log("connected"))
@@ -65,6 +70,48 @@ app.get('/user/profile', async(req,res) => {
 
 app.post('/user/logout', async(req,res) => {
     res.cookie('token','').json('ok')
+})
+
+
+// handle new post
+app.post('/post/newpost', uploadMiddleware.single('file'), async(req,res) => {
+    const { originalname, path } = req.file;
+    const parts = originalname.split('.')
+    const ext = parts[parts.length - 1].toLowerCase()
+    const newPath = path+'.'+ext;
+    fs.renameSync(path, path+'.'+ext)
+
+    
+    const { token } = req.cookies;
+    jwt.verify(token, secret, {}, async(err,info) => {
+        if(err) throw err;
+        const { title, summary, content } = req.body;
+        const newPostDoc = await Post.create({
+            title,
+            summary,
+            content,
+            cover: newPath,
+            author: info.id,
+        })
+    })
+    
+
+    res.json('ok')
+})
+
+
+app.get('/allposts', async(req,res) => {
+    const posts = await Post.find().populate('author', [ 'username' ])
+    .sort({createdAt: -1})
+    .limit(20)
+    res.json(posts)
+})
+
+
+app.get('/post/:id', async(req,res) => {
+    const {id} = req.params;
+    const postData = await Post.findById(id).populate('author', ['username']);
+    res.json(postData)
 })
 
 app.listen(PORT, () => {
