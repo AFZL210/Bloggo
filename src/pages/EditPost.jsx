@@ -15,7 +15,7 @@ const EditPost = () => {
   const postId = useParams().id;
 
   useEffect(() => {
-    fetch(`http://localhost:5000/post/${postId}`)
+    fetch(`${process.env.REACT_APP_API_HEAD}/post/${postId}`)
         .then(res => {
             res.json().then(postInfo => {
                 setTitle(postInfo.title)
@@ -37,7 +37,7 @@ const EditPost = () => {
 
     e.preventDefault();
     
-    const response = await fetch('http://localhost:5000/post/update', {
+    const response = await fetch(`${process.env.REACT_APP_API_HEAD}/post/update`, {
       method: 'PUT',
       body: postData,
       credentials: 'include',

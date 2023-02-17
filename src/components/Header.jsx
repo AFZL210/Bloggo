@@ -13,7 +13,7 @@ const Header = () => {
 
     try{
 
-      const response = await fetch('http://localhost:5000/user/profile', {
+      const response = await fetch(`${process.env.REACT_APP_API_HEAD}/user/profile`, {
         credentials: 'include'
       })
       if(response.status === 401) setUserInfo({})
@@ -37,7 +37,7 @@ const Header = () => {
 
 
   const logoutUser = () => {
-    fetch('http://localhost:5000/user/logout', {
+    fetch(`${process.env.REACT_APP_API_HEAD}/user/logout`, {
       credentials: 'include',
       method: 'POST',
     })

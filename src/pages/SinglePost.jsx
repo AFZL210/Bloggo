@@ -10,7 +10,7 @@ const SinglePost = () => {
    const { userInfo } = useContext(UserContext);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/post/${postId}`)
+    fetch(`${process.env.REACT_APP_API_HEAD}/post/${postId}`)
         .then(res => {
             res.json().then(postData => {
                 setPostData(postData);
