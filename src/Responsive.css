@@ -1,0 +1,7 @@
+/** Mobile Responsive **/
+
+@media only screen and ( max-width: 750px ) {
+    .post-link h2{
+      font-size: 0.8rem;
+    }
+  }
