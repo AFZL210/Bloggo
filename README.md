@@ -1,6 +1,8 @@
 
 # Bloggo
 
+Bloggo is a full stack web application inspired by Medium that allows users to create and publish their own blog posts.
+
 
 ## Screenshots
 Home
