@@ -7,17 +7,29 @@ const Header = () => {
 
   const {userInfo,setUserInfo} = useContext(UserContext)
 
-  useEffect(() => {
-    if(userInfo!==null) {
-      fetch('http://localhost:5000/user/profile', {
+  const checkAuth = async() => {
+
+    try{
+
+      const response = await fetch('https://test-r6ym.onrender.com/user/profile', {
         credentials: 'include'
-      }).then(res => {
-        res.json().then(loginInfo => {
-          setUserInfo(loginInfo)
-        })
       })
+      if(response.status === 401) setUserInfo({})
+      const userData = await response.json()
+      setUserInfo(userData)
+      console.log(userData)
+    } catch(err) {
+      console.log(err)
+      setUserInfo({})
     }
+
+  }
+
+
+  useEffect(() => {
+      checkAuth()
   }, [])
+
 
   const logoutUser = () => {
     fetch('http://localhost:5000/user/logout', {

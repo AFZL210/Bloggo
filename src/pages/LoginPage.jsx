@@ -14,19 +14,24 @@ const LoginPage = () => {
   const loginUser = async(e) => {
     e.preventDefault();
 
-    const newLogin = await fetch('http://localhost:5000/user/login', {
-      method: 'POST',
-      body: JSON.stringify({username,password}),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    })
+    if(!username || !password) alert('username or password cannot be empty')
+    else{
 
-    if(newLogin.status !== 200) alert('login failed')
-    else {
-      newLogin.json().then(userInfo => {
-        setUserInfo(userInfo)
-        setRedirect(true)
+      const newLogin = await fetch('https://test-r6ym.onrender.com/user/login', {
+        method: 'POST',
+        body: JSON.stringify({username,password}),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
       })
+  
+      if(newLogin.status !== 200) alert('login failed')
+      else {
+        newLogin.json().then(userInfo => {
+          setUserInfo(userInfo)
+          console.log(userInfo)
+          setRedirect(true)
+        })
+      }
     }
   }
 

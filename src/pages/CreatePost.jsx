@@ -21,7 +21,7 @@ const CreatePost = () => {
 
     e.preventDefault();
     
-    const response = await fetch('http://localhost:5000/post/newpost', {
+    const response = await fetch('https://test-r6ym.onrender.com/post/newpost', {
       method: 'POST',
       body: postData,
       credentials: 'include',

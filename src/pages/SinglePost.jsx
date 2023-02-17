@@ -10,11 +10,10 @@ const SinglePost = () => {
    const { userInfo } = useContext(UserContext);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/post/${postId}`)
+    fetch(`https://test-r6ym.onrender.com/post/${postId}`)
         .then(res => {
             res.json().then(postData => {
                 setPostData(postData);
-                console.log(postData)
             })
         })
   }, [])  
@@ -28,7 +27,7 @@ const SinglePost = () => {
             <time>{format(new Date(postData.createdAt), 'MMM d yyyy HH:mm')}</time>
             <p className='author'>by @{postData.author.username}</p>
         <div className="image">
-            <img src={`http://localhost:5000/${postData.cover}`} alt="img" />
+            <img src={`https://test-r6ym.onrender.com/${postData.cover}`} alt="img" />
         </div>
         <div dangerouslySetInnerHTML={{__html:postData.content}}/>
     </div>
