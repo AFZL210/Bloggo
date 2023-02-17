@@ -18,7 +18,7 @@ app.use(cors({credentials:true, origin:'http://localhost:3000'}));
 app.use(express.json())
 app.use(cookieParser())
 const salt = bcrypt.genSaltSync(10)
-const secret = 'abc123xyz'
+const secret = process.env.JWT_SECRET
 app.use('/uploads', express.static(__dirname + '/uploads'))
 const uri = process.env.MONGO_URI
 
@@ -31,6 +31,8 @@ app.get('/test', (req,res) => {
     res.json('ok')
 })
 
+
+
 app.post('/user/register', asyncHandler(async(req,res) => {
     const { username, password } = req.body;
 
@@ -41,6 +43,8 @@ app.post('/user/register', asyncHandler(async(req,res) => {
         res.status(400).json(e);
     }
 }))
+
+
 
 
 app.post('/user/login', async(req,res) => {
@@ -66,6 +70,8 @@ app.post('/user/login', async(req,res) => {
 })
 
 
+
+
 app.get('/user/profile', asyncHandler(async(req,res) => {
     const { token } = req.cookies;
     if(token === undefined || token.length === 0) res.json('false')
@@ -85,6 +91,8 @@ app.get('/user/profile', asyncHandler(async(req,res) => {
 app.post('/user/logout', async(req,res) => {
     res.cookie('token','').json('ok')
 })
+
+
 
 
 // handle new post
@@ -114,6 +122,8 @@ app.post('/post/newpost', uploadMiddleware.single('file'), async(req,res) => {
 })
 
 
+
+
 app.get('/allposts', async(req,res) => {
     const posts = await Post.find().populate('author', [ 'username' ])
     .sort({createdAt: -1})
@@ -122,10 +132,47 @@ app.get('/allposts', async(req,res) => {
 })
 
 
+
+
 app.get('/post/:id', async(req,res) => {
     const {id} = req.params;
     const postData = await Post.findById(id).populate('author', ['username']);
     res.json(postData)
+})
+
+
+
+// update post
+app.put('/post/update',uploadMiddleware.single('file'), async(req,res) => {
+    let newPath = null;
+    if (req.file) {
+      const {originalname,path} = req.file;
+      const parts = originalname.split('.');
+      const ext = parts[parts.length - 1];
+      newPath = path+'.'+ext;
+      fs.renameSync(path, newPath);
+    }
+  
+    const {token} = req.cookies;
+    jwt.verify(token, secret, {}, async (err,info) => {
+      if (err) throw err;
+      const {id,title,summary,content} = req.body;
+      const postDoc = await Post.findById(id);
+      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+      if (!isAuthor) {
+        return res.status(400).json('not authorized');
+      }
+      await postDoc.updateOne({
+        title,
+        summary,
+        content,
+        cover: newPath ? newPath : postDoc.cover,
+      });
+  
+      res.json(postDoc);
+    });
+  
+    
 })
 
 app.listen(PORT, () => {
