@@ -17,7 +17,7 @@ const LoginPage = () => {
     if(!username || !password) alert('username or password cannot be empty')
     else{
 
-      const newLogin = await fetch('https://test-r6ym.onrender.com/user/login', {
+      const newLogin = await fetch('http://localhost:5000/user/login', {
         method: 'POST',
         body: JSON.stringify({username,password}),
         headers: { 'Content-Type': 'application/json' },

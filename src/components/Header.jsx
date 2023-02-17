@@ -2,25 +2,30 @@ import React, {useEffect, useContext, useState } from 'react'
 import '../App.css'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../UserContext'
+import { useNavigate } from 'react-router-dom'
 
 const Header = () => {
 
   const {userInfo,setUserInfo} = useContext(UserContext)
+  const navigate = useNavigate()
 
   const checkAuth = async() => {
 
     try{
 
-      const response = await fetch('https://test-r6ym.onrender.com/user/profile', {
+      const response = await fetch('http://localhost:5000/user/profile', {
         credentials: 'include'
       })
       if(response.status === 401) setUserInfo({})
       const userData = await response.json()
       setUserInfo(userData)
-      console.log(userData)
+      console.log(userInfo)
     } catch(err) {
       console.log(err)
       setUserInfo({})
+      setTimeout(() => {
+        navigate('/')
+      },1000)
     }
 
   }

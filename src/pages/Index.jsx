@@ -9,7 +9,7 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://test-r6ym.onrender.com/allposts').then(res => {
+    fetch('http://localhost:5000/allposts').then(res => {
       res.json().then(posts => {
         setPosts(posts);
         setLoading(false);

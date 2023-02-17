@@ -13,7 +13,7 @@ const RegisterPage = () => {
     if(!username || !password) alert('username or password cannot be empty')
     else{
 
-      const newUser = await fetch('https://test-r6ym.onrender.com/user/register', {
+      const newUser = await fetch('http://localhost:5000/user/register', {
         method: 'POST',
         body: JSON.stringify({username, password}),
         headers: { 'Content-Type': 'application/json' }
