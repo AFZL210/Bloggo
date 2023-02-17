@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
 const PORT = 5000 || process.env.PORT;
@@ -19,11 +20,16 @@ app.use(cookieParser())
 const salt = bcrypt.genSaltSync(10)
 const secret = 'abc123xyz'
 app.use('/uploads', express.static(__dirname + '/uploads'))
+const uri = process.env.MONGO_URI
 
-mongoose.connect(`mongodb+srv://BLOGGO123:wD0JgC0h7cw5obuL@bloggo-cluster.dr2synp.mongodb.net/?retryWrites=true&w=majority`)
+mongoose.connect(uri)
 .then(() => console.log("connected"))
 .catch(e => console.log(e))
 
+
+app.get('/test', (req,res) => {
+    res.json('ok')
+})
 
 app.post('/user/register', asyncHandler(async(req,res) => {
     const { username, password } = req.body;
@@ -50,7 +56,8 @@ app.post('/user/login', async(req,res) => {
             }
             res.cookie('token',token).json({
                 id: loginUser._id,
-                username: username
+                username: username,
+                token:token
             })
         })
     } else {
@@ -59,13 +66,20 @@ app.post('/user/login', async(req,res) => {
 })
 
 
-app.get('/user/profile', async(req,res) => {
+app.get('/user/profile', asyncHandler(async(req,res) => {
     const { token } = req.cookies;
-    jwt.verify(token, secret, {}, (err,info) => {
-        if(err) throw err;
-        res.json(info)
-    })
-})
+    if(token === undefined || token.length === 0) res.json('false')
+    else {
+
+        jwt.verify(token, secret, {}, (err,info) => {
+            if(err) {
+            console.log(err);
+            res.status(401)
+        }
+            res.json(info)
+        })
+    }
+}))
 
 
 app.post('/user/logout', async(req,res) => {
