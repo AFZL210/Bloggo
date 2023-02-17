@@ -7,17 +7,24 @@ const Header = () => {
 
   const {userInfo,setUserInfo} = useContext(UserContext)
 
-  useEffect(() => {
-    if(userInfo!==null) {
-      fetch('http://localhost:5000/user/profile', {
-        credentials: 'include'
-      }).then(res => {
-        res.json().then(loginInfo => {
-          setUserInfo(loginInfo)
-        })
-      })
+  const checkAuth = async() => {
+    const response = await fetch('http://localhost:5000/user/profile', {
+      credentials: 'include'
+    })
+
+    const userData = await response.json()
+    if(userData === 'false') setUserInfo(null)
+    else {
+      setUserInfo(userData)
     }
+  }
+
+
+  useEffect(() => {
+      checkAuth()
+      console.log(userInfo)
   }, [])
+
 
   const logoutUser = () => {
     fetch('http://localhost:5000/user/logout', {

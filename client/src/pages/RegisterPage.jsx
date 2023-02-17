@@ -9,15 +9,19 @@ const RegisterPage = () => {
 
   const registerUser = async(e) => {
     e.preventDefault();
-    
-    const newUser = await fetch('http://localhost:5000/user/register', {
-      method: 'POST',
-      body: JSON.stringify({username, password}),
-      headers: { 'Content-Type': 'application/json' }
-    })
 
-    if(newUser.status !== 200) alert('registration failed')
-    else alert('resgistered succesfullly!')
+    if(!username || !password) alert('username or password cannot be empty')
+    else{
+
+      const newUser = await fetch('http://localhost:5000/user/register', {
+        method: 'POST',
+        body: JSON.stringify({username, password}),
+        headers: { 'Content-Type': 'application/json' }
+      })
+  
+      if(newUser.status !== 200) alert('registration failed')
+      else alert('resgistered succesfullly!')
+    }
   }
 
   return (

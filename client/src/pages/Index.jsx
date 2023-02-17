@@ -17,7 +17,7 @@ const Index = () => {
   return (
     <>
         {posts.length > 0 && posts.map(post => (
-          <Post key={post.createdAt} {...post} />
+          <Post key={post.createdAt} {...post} author={post.author.username}/>
         ))}
     </>
   )
