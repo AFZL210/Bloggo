@@ -13,7 +13,7 @@ const Header = () => {
 
     try{
 
-      const response = await fetch(`${process.env.REACT_APP_API_HEAD}/user/profile`, {
+      const response = await fetch(`https://test-r6ym.onrender.com/user/profile`, {
         credentials: 'include'
       })
       if(response.status === 401) setUserInfo({})
