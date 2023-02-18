@@ -21,7 +21,7 @@ const CreatePost = () => {
 
     e.preventDefault();
     
-    const response = await fetch(`https://test-r6ym.onrender.com/post/newpost`, {
+    const response = await fetch(`${process.env.REACT_APP_API_HEAD}/post/newpost`, {
       method: 'POST',
       body: postData,
       credentials: 'include',

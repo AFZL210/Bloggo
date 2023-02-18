@@ -10,7 +10,7 @@ const SinglePost = () => {
    const { userInfo } = useContext(UserContext);
 
   useEffect(() => {
-    fetch(`https://test-r6ym.onrender.com/post/${postId}`)
+    fetch(`${process.env.REACT_APP_API_HEAD}/post/${postId}`)
         .then(res => {
             res.json().then(postData => {
                 setPostData(postData);
@@ -32,7 +32,7 @@ const SinglePost = () => {
                 )
             }
         <div className="image">
-            <img src={`http://localhost:5000/${postData.cover}`} alt="img" />
+            <img src={`${process.env.REACT_APP_SERVER_HEAD}/${postData.cover}`} alt="img" />
         </div>
         <div dangerouslySetInnerHTML={{__html:postData.content}}/>
     </div>
