@@ -22,7 +22,6 @@ const SinglePost = () => {
   }, [])  
 
 
-  if(!postData) return "No Post Found"
 
   return (
     <div className='post-container'>
