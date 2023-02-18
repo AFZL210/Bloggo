@@ -7,7 +7,7 @@ const Post = ({ title, summary, cover, createdAt, author, _id }) => {
   return (
     <div className="post" id='post-row'>
     <div className="image">
-      <Link to={`/post/${_id}`} className='post-link'><img id='cover' src={'http://localhost:5000/'+cover} alt="blog-post-image" /></Link>
+      <Link to={`/post/${_id}`} className='post-link'><img id='cover' src={`${process.env.REACT_APP_SERVER_HEAD}/`+cover} alt="blog-post-image" /></Link>
     </div>
     <div className="texts">
       <Link to={`/post/${_id}`} className='post-link'><h2>{title}</h2></Link>

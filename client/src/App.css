@@ -152,7 +152,6 @@ form h4{
 .post-container .author{
   text-align: center;
   margin-top: 0;
-  margin-bottom: 20px;
   font-size: 0.8rem;
   font-weight: bold;
 }
@@ -169,6 +168,11 @@ form h4{
 
 .post-container {
   overflow: hidden;
+}
+
+.edit-row{
+  margin: 0;
+  text-align: center;
 }
 
 /** Mobile Responsive **/
