@@ -3,7 +3,7 @@
 
 Bloggo is a full stack blogging app , anyone can create and publish their own blog posts.
 
-try bloggo(https://bloggo-nz7v.onrender.com/)
+try bloggo(https://blog-c40q.onrender.com/)
 
 
 ## Screenshots
